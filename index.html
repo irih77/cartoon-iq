@@ -3,7 +3,7 @@
   <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-	<title>IQ TEST by Bittu - 100% Stable Edition</title>
+	<title>IQ TEST by Bittu - Full Cartoon Edition</title>
 
 	<!-- Firebase SDKs -->
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -42,10 +42,11 @@
       align-items: center;
       justify-content: flex-start;
       gap: 6px;
-      padding: env(safe-area-inset-top, 8px) 12px env(safe-area-inset-bottom, 10px) 12px;
+      padding: env(safe-area-inset-top, 8px) 10px env(safe-area-inset-bottom, 10px) 10px;
       position: relative;
     }
 
+    /* Startup Splash Screen */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -75,7 +76,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .title-row {
@@ -119,8 +120,8 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       border-radius: 50%;
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -132,11 +133,11 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 5px 9px;
+      padding: 4px 8px;
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 11px;
+      gap: 4px;
+      font-size: 10px;
       font-weight: 800;
       color: #38bdf8;
       cursor: pointer;
@@ -151,14 +152,14 @@
     .streak-badge {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
-      padding: 5px 9px;
+      padding: 4px 8px;
       border-radius: 18px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: #ffb703;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
     }
 
@@ -167,7 +168,7 @@
       color: #080914;
       font-size: 8px;
       font-weight: 900;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 6px;
       text-transform: uppercase;
     }
@@ -179,8 +180,8 @@
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      padding: 8px 10px;
-      border-radius: 14px;
+      padding: 6px 8px;
+      border-radius: 12px;
       backdrop-filter: blur(12px);
     }
 
@@ -193,13 +194,12 @@
     .hud-label {
       font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
       color: #94a3b8;
       font-weight: 700;
     }
 
     .hud-val {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: #38bdf8;
       margin-top: 1px;
@@ -215,6 +215,11 @@
       animation: flash 0.5s infinite alternate;
     }
 
+    @keyframes flash {
+      from { opacity: 1; }
+      to { opacity: 0.4; }
+    }
+
     .board-viewport {
       width: 100%;
       max-width: 480px;
@@ -222,7 +227,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 4px 0;
+      margin: 2px 0;
       position: relative;
     }
 
@@ -241,7 +246,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 55px;
+      min-height: 50px;
       transform-style: preserve-3d;
       transition: transform 0.35s ease;
       cursor: pointer;
@@ -271,7 +276,7 @@
 
     .card-front::after {
       content: '⚡';
-      font-size: 18px;
+      font-size: 16px;
       opacity: 0.4;
     }
 
@@ -291,26 +296,26 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 4px;
+      padding: 3px;
     }
 
     .char-card-wrap svg {
-      width: 70%;
-      height: 70%;
+      width: 72%;
+      height: 72%;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
 
     .char-label {
       position: absolute;
       bottom: 2px;
-      font-size: 8px;
+      font-size: 7px;
       font-weight: 900;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       color: #ffffff;
       background: rgba(0, 0, 0, 0.5);
-      padding: 1px 5px;
-      border-radius: 6px;
+      padding: 1px 4px;
+      border-radius: 5px;
     }
 
     .card.matched .card-back {
@@ -332,7 +337,6 @@
       font-size: 10px;
       color: #64748b;
       font-weight: 600;
-      letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
 
@@ -350,7 +354,7 @@
 
     .btn {
       flex: 1;
-      padding: 10px 0;
+      padding: 9px 0;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--card-border);
       color: #cbd5e1;
@@ -368,14 +372,14 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(3, 7, 18, 0.88);
+      background: rgba(3, 7, 18, 0.9);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.25s ease;
       z-index: 100;
       padding: 20px;
     }
@@ -388,7 +392,7 @@
     .modal-card {
       background: #0f172a;
       border: 1px solid var(--card-border);
-      padding: 22px 18px;
+      padding: 20px 16px;
       border-radius: 20px;
       text-align: center;
       width: 100%;
@@ -398,7 +402,7 @@
 
     .btn-main {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: linear-gradient(135deg, var(--accent), var(--purple));
       border: none;
       color: #fff;
@@ -414,20 +418,20 @@
     .level-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      max-height: 250px;
+      gap: 8px;
+      max-height: 240px;
       overflow-y: auto;
-      padding: 8px 4px 16px 4px;
-      margin-bottom: 12px;
+      padding: 6px 2px 14px 2px;
+      margin-bottom: 10px;
     }
 
     .lvl-btn {
       aspect-ratio: 1;
       background: rgba(255, 255, 255, 0.06);
       border: 1.5px solid var(--card-border);
-      border-radius: 12px;
+      border-radius: 10px;
       color: #cbd5e1;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -455,9 +459,9 @@
     }
 
     .leaderboard-box {
-      max-height: 240px;
+      max-height: 230px;
       overflow-y: auto;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       flex-direction: column;
       gap: 5px;
@@ -467,16 +471,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 10px;
+      padding: 6px 8px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 10px;
+      border-radius: 8px;
       font-size: 11px;
-    }
-
-    .leaderboard-row.my-rank {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
     }
 </style>
   </head>
@@ -537,38 +536,39 @@
 	  <button class="btn" onclick="confirmReset()">⏮️ Reset</button>
 	</div>
 
-	<!-- Modals -->
+	<!-- Win / Over Modal -->
 	<div class="modal-overlay" id="modal">
 	  <div class="modal-card">
 		<div style="font-size:36px;margin-bottom:6px;" id="modalIcon">🎉</div>
 		<div style="font-size:18px;font-weight:800;color:#fff;" id="modalTitle">LEVEL CLEARED</div>
-		<div style="font-size:12px;color:#94a3b8;margin:8px 0 16px;" id="modalDesc">Brain reflex sharp!</div>
+		<div style="font-size:12px;color:#94a3b8;margin:8px 0 14px;" id="modalDesc">Brain reflex sharp!</div>
 		<button class="btn-main" id="modalBtn">NEXT LEVEL</button>
 	  </div>
 	</div>
 
+	<!-- Level Selector Modal -->
 	<div class="modal-overlay" id="levelModal">
 	  <div class="modal-card">
-		<div style="font-size:32px;">🗺️</div>
-		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">SELECT LEVEL</div>
+		<div style="font-size:30px;">🗺️</div>
+		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">SELECT LEVEL</div>
 		<div class="level-grid" id="levelGrid"></div>
 		<button class="btn-main" onclick="closeLevelModal()">CLOSE</button>
 	  </div>
 	</div>
 
-	<!-- Account Modal (Google + Nickname) -->
+	<!-- Player Profile Modal -->
 	<div class="modal-overlay" id="accountModal">
 	  <div class="modal-card">
 		<div style="font-size:32px;">👤</div>
-		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">PLAYER PROFILE</div>
-		<div style="font-size:12px;color:#94a3b8;margin-bottom:14px;">Sign in with Google or set a nickname</div>
+		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">PLAYER PROFILE</div>
+		<div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">Sign in with Google or save a nickname</div>
 		
-		<button class="btn-main" style="background:#4285f4;margin-bottom:10px;" onclick="signInWithGoogle()">
+		<button class="btn-main" id="gBtn" style="background:#4285f4;margin-bottom:10px;" onclick="handleGoogleLogin()">
 		  🌐 SIGN IN WITH GOOGLE
 		</button>
 		
-		<div style="display:flex;gap:6px;margin-bottom:12px;">
-		  <input type="text" id="nicknameInput" placeholder="Or enter Nickname" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:12px;outline:none;">
+		<div style="display:flex;gap:6px;margin-bottom:10px;">
+		  <input type="text" id="nicknameInput" placeholder="Enter Nickname" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:12px;outline:none;">
 		  <button class="btn" style="flex:0 0 70px;background:#38bdf8;color:#000;font-weight:800;" onclick="saveNickname()">SAVE</button>
 		</div>
 
@@ -576,16 +576,117 @@
 	  </div>
 	</div>
 
+	<!-- Leaderboard Modal -->
 	<div class="modal-overlay" id="leaderboardModal">
 	  <div class="modal-card">
-		<div style="font-size:32px;">🏆</div>
-		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">TOP 100 RANKING</div>
+		<div style="font-size:30px;">🏆</div>
+		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">TOP 100 RANKING</div>
 		<div class="leaderboard-box" id="leaderboardBox"></div>
 		<button class="btn-main" onclick="closeLeaderboard()">CLOSE</button>
 	  </div>
 	</div>
 
 <script>
+    // --- 1. Sound FX Synthesizer ---
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundToggle').innerText = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playSound('flip');
+    }
+
+    function playTone(freq, type, duration, startTime = 0, gainLevel = 0.2) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+        gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime + startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + startTime);
+        osc.stop(audioCtx.currentTime + startTime + duration);
+      } catch (e) {}
+    }
+
+    function playSound(name) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (name === 'flip') playTone(600, 'sine', 0.08, 0, 0.15);
+      else if (name === 'match') {
+        playTone(523.25, 'triangle', 0.12, 0, 0.25);
+        playTone(659.25, 'triangle', 0.12, 0.08, 0.25);
+        playTone(783.99, 'triangle', 0.18, 0.16, 0.25);
+      } 
+      else if (name === 'wrong') {
+        playTone(180, 'sawtooth', 0.15, 0, 0.18);
+        playTone(130, 'sawtooth', 0.22, 0.1, 0.18);
+      } 
+      else if (name === 'levelup') {
+        playTone(440, 'sine', 0.15, 0, 0.25);
+        playTone(554.37, 'sine', 0.15, 0.12, 0.25);
+        playTone(880, 'triangle', 0.45, 0.24, 0.3);
+      } 
+      else if (name === 'gameover') {
+        playTone(300, 'triangle', 0.2, 0, 0.25);
+        playTone(200, 'sine', 0.35, 0.18, 0.25);
+      } 
+      else if (name === 'start') {
+        playTone(400, 'sine', 0.15, 0, 0.2);
+        playTone(600, 'triangle', 0.25, 0.15, 0.25);
+      }
+    }
+
+    // --- 2. 30 Offline Cartoon Characters ---
+    const ALL_CHARACTERS = [
+      { id: 'pikachu', tier: 1, name: 'Pikachu', bg: '#ffca28', svg: `<svg viewBox="0 0 100 100"><polygon points="20,10 15,35 32,35" fill="#212121"/><polygon points="80,10 85,35 68,35" fill="#212121"/><circle cx="50" cy="55" r="32" fill="#ffd600"/><circle cx="38" cy="50" r="4" fill="#212121"/><circle cx="62" cy="50" r="4" fill="#212121"/><circle cx="28" cy="62" r="7" fill="#ff1744"/><circle cx="72" cy="62" r="7" fill="#ff1744"/><path d="M44 60 Q50 66 56 60" fill="none" stroke="#212121" stroke-width="2.5"/></svg>` },
+      { id: 'doraemon', tier: 1, name: 'Doraemon', bg: '#03a9f4', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#0288d1"/><ellipse cx="50" cy="56" rx="28" ry="24" fill="#fff"/><circle cx="50" cy="48" r="5" fill="#e53935"/><line x1="50" y1="53" x2="50" y2="70" stroke="#333" stroke-width="2"/><path d="M35 68 Q50 82 65 68" fill="none" stroke="#333" stroke-width="2.5"/></svg>` },
+      { id: 'nobita', tier: 1, name: 'Nobita', bg: '#fbc02d', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#ffe0b2"/><circle cx="40" cy="52" r="11" fill="none" stroke="#212121" stroke-width="3"/><circle cx="60" cy="52" r="11" fill="none" stroke="#212121" stroke-width="3"/><circle cx="40" cy="52" r="2.5" fill="#212121"/><circle cx="60" cy="52" r="2.5" fill="#212121"/></svg>` },
+      { id: 'tom', tier: 1, name: 'Tom', bg: '#546e7a', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="58" r="30" fill="#78909c"/><ellipse cx="40" cy="54" rx="6" ry="10" fill="#ffeb3b"/><ellipse cx="60" cy="54" rx="6" ry="10" fill="#ffeb3b"/><circle cx="50" cy="66" r="4" fill="#ff8a80"/></svg>` },
+      { id: 'jerry', tier: 1, name: 'Jerry', bg: '#8d6e63', svg: `<svg viewBox="0 0 100 100"><circle cx="25" cy="30" r="18" fill="#a1887f"/><circle cx="75" cy="30" r="18" fill="#a1887f"/><circle cx="50" cy="60" r="26" fill="#a1887f"/><circle cx="50" cy="66" r="4" fill="#212121"/></svg>` },
+      { id: 'shinchan', tier: 1, name: 'Shinchan', bg: '#e53935', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#ffe0b2"/><circle cx="40" cy="48" r="5" fill="#212121"/><circle cx="60" cy="48" r="5" fill="#212121"/><circle cx="28" cy="58" r="6" fill="#ff8a80"/><circle cx="72" cy="58" r="6" fill="#ff8a80"/></svg>` },
+      { id: 'dora', tier: 1, name: 'Dora', bg: '#e91e63', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="28" fill="#d7ccc8"/><circle cx="40" cy="52" r="4" fill="#3e2723"/><circle cx="60" cy="52" r="4" fill="#3e2723"/></svg>` },
+      { id: 'goku', tier: 2, name: 'Goku', bg: '#ff5722', svg: `<svg viewBox="0 0 100 100"><path d="M50 8 L35 32 L44 32 L20 48 L38 48 L14 74 L42 66 L34 92 L75 52 L54 52 L78 30 L60 30 Z" fill="#ffd600" stroke="#ff6d00" stroke-width="3"/></svg>` },
+      { id: 'naruto', tier: 2, name: 'Naruto', bg: '#ff9800', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#ffe0b2"/><rect x="15" y="24" width="70" height="22" rx="4" fill="#263238"/><circle cx="36" cy="58" r="4" fill="#29b6f6"/><circle cx="64" cy="58" r="4" fill="#29b6f6"/></svg>` },
+      { id: 'sonic', tier: 2, name: 'Sonic', bg: '#1e88e5', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="26" fill="#ffe0b2"/><ellipse cx="42" cy="50" rx="5" ry="9" fill="#212121"/><ellipse cx="58" cy="50" rx="5" ry="9" fill="#212121"/></svg>` },
+      { id: 'luffy', tier: 2, name: 'Luffy', bg: '#d32f2f', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="44" ry="14" fill="#ffd54f"/><circle cx="50" cy="62" r="18" fill="#ffe0b2"/></svg>` },
+      { id: 'ben10', tier: 2, name: 'Ben 10', bg: '#2e7d32', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#212121"/><circle cx="50" cy="50" r="24" fill="#76ff03"/><polygon points="28,50 42,32 58,32 72,50 58,68 42,68" fill="#212121"/></svg>` },
+      { id: 'mario', tier: 2, name: 'Mario', bg: '#c62828', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#d32f2f"/><circle cx="50" cy="50" r="28" fill="#fff"/><text x="50" y="62" font-size="34" font-weight="900" font-family="Arial" fill="#d32f2f" text-anchor="middle">M</text></svg>` },
+      { id: 'hulk', tier: 2, name: 'Hulk', bg: '#1b5e20', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36" fill="#4caf50"/><rect x="35" y="48" width="10" height="5" fill="#1b5e20"/><rect x="55" y="48" width="10" height="5" fill="#1b5e20"/></svg>` },
+      { id: 'spiderman', tier: 3, name: 'Spidey', bg: '#b71c1c', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="32" ry="40" fill="#d32f2f"/><path d="M32 42 Q40 40 46 48 Q40 58 32 42 Z" fill="#fff"/><path d="M68 42 Q60 40 54 48 Q60 58 68 42 Z" fill="#fff"/></svg>` },
+      { id: 'batman', tier: 3, name: 'Batman', bg: '#263238', svg: `<svg viewBox="0 0 100 100"><path d="M50 25 Q35 15 25 35 Q10 50 25 72 Q50 90 50 90 Q50 90 75 72 Q90 50 75 35 Q65 15 50 25 Z" fill="#ffeb3b"/><path d="M50 38 L43 50 L30 46 L38 60 L24 64 L36 74 Q50 68 50 68 Q50 68 64 74 L76 64 L62 60 L70 46 L57 50 Z" fill="#212121"/></svg>` },
+      { id: 'ironman', tier: 3, name: 'Iron Man', bg: '#880e4f', svg: `<svg viewBox="0 0 100 100"><path d="M30 20 L70 20 L82 50 L70 82 L50 90 L30 82 L18 50 Z" fill="#c62828"/><rect x="34" y="48" width="12" height="4" rx="2" fill="#80d8ff"/><rect x="54" y="48" width="12" height="4" rx="2" fill="#80d8ff"/></svg>` },
+      { id: 'saitama', tier: 3, name: 'Saitama', bg: '#fbc02d', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="30" ry="38" fill="#ffe0b2"/><ellipse cx="38" cy="46" rx="4" ry="2" fill="#212121"/><ellipse cx="62" cy="46" rx="4" ry="2" fill="#212121"/></svg>` },
+      { id: 'oggy', tier: 3, name: 'Oggy', bg: '#0277bd', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="32" fill="#29b6f6"/><circle cx="50" cy="52" r="10" fill="#e53935"/></svg>` },
+      { id: 'chhotabheem', tier: 3, name: 'Bheem', bg: '#ff6f00', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#d7ccc8"/><circle cx="50" cy="20" r="10" fill="#3e2723"/><line x1="50" y1="36" x2="50" y2="46" stroke="#d50000" stroke-width="4"/></svg>` },
+      { id: 'motu', tier: 3, name: 'Motu', bg: '#f57c00', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36" fill="#ffe0b2"/><circle cx="50" cy="48" r="6" fill="#ffab91"/></svg>` },
+      { id: 'patlu', tier: 3, name: 'Patlu', bg: '#fbc02d', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="25" ry="38" fill="#ffe0b2"/><rect x="30" y="42" width="16" height="12" rx="3" fill="none" stroke="#212121" stroke-width="3"/><rect x="54" y="42" width="16" height="12" rx="3" fill="none" stroke="#212121" stroke-width="3"/></svg>` },
+      { id: 'mickey', tier: 4, name: 'Mickey', bg: '#c2185b', svg: `<svg viewBox="0 0 100 100"><circle cx="25" cy="25" r="18" fill="#212121"/><circle cx="75" cy="25" r="18" fill="#212121"/><circle cx="50" cy="58" r="30" fill="#212121"/></svg>` },
+      { id: 'spongebob', tier: 4, name: 'SpongeBob', bg: '#fbc02d', svg: `<svg viewBox="0 0 100 100"><rect x="25" y="20" width="50" height="60" rx="4" fill="#ffee58"/><circle cx="40" cy="45" r="10" fill="#fff"/><circle cx="60" cy="45" r="10" fill="#fff"/></svg>` },
+      { id: 'mrbean', tier: 4, name: 'Mr. Bean', bg: '#5d4037', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#d7ccc8"/><circle cx="38" cy="48" r="8" fill="#fff"/><circle cx="62" cy="48" r="8" fill="#fff"/></svg>` },
+      { id: 'popeye', tier: 4, name: 'Popeye', bg: '#0d47a1', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#ffe0b2"/><rect x="25" y="60" width="14" height="6" fill="#795548"/></svg>` },
+      { id: 'scooby', tier: 4, name: 'Scooby', bg: '#6d4c41', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="30" ry="38" fill="#8d6e63"/><circle cx="40" cy="42" r="3" fill="#212121"/><circle cx="60" cy="42" r="3" fill="#212121"/></svg>` },
+      { id: 'deadpool', tier: 4, name: 'Deadpool', bg: '#b71c1c', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="32" ry="40" fill="#c62828"/><ellipse cx="38" cy="48" rx="11" ry="16" fill="#212121"/><ellipse cx="62" cy="48" rx="11" ry="16" fill="#212121"/></svg>` },
+      { id: 'minion', tier: 4, name: 'Minion', bg: '#0277bd', svg: `<svg viewBox="0 0 100 100"><rect x="25" y="20" width="50" height="65" rx="25" fill="#ffeb3b"/><circle cx="50" cy="47" r="14" fill="#fff"/></svg>` },
+      { id: 'pinkpanther', tier: 4, name: 'Pink Panther', bg: '#880e4f', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="28" ry="38" fill="#f48fb1"/><circle cx="24" cy="24" r="10" fill="#f06292"/><circle cx="76" cy="24" r="10" fill="#f06292"/></svg>` }
+    ];
+
+    // --- 3. Firebase & Fallback Auth ---
     const firebaseConfig = {
       apiKey: "AIzaSyAoRfpzV4ovflLeevjBI7mDH9XsBgSAStJ4",
       authDomain: "cartoon-iq-game.firebaseapp.com",
@@ -593,58 +694,50 @@
       databaseURL: "https://cartoon-iq-game-default-rtdb.firebaseio.com/"
     };
 
-    let auth = null, db = null, currentUser = null, isFirebaseReady = false;
+    let auth = null, db = null, currentUser = null;
 
     try {
-      if (window.firebase && firebaseConfig.apiKey) {
+      if (window.firebase) {
         firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.database();
-        isFirebaseReady = true;
 
-        auth.onAuthStateChanged((user) => {
+        auth.getRedirectResult().then(res => {
+          if (res && res.user) {
+            currentUser = res.user;
+            updateUserUI(res.user.displayName, res.user.photoURL);
+            syncScore();
+          }
+        }).catch(e => console.warn(e));
+
+        auth.onAuthStateChanged(user => {
           if (user) {
             currentUser = user;
             updateUserUI(user.displayName, user.photoURL);
-            syncOnlineScore();
-          } else {
-            currentUser = null;
-            let localName = localStorage.getItem('iq_player_name') || 'LOGIN';
-            updateUserUI(localName, null);
+            syncScore();
           }
         });
       }
-    } catch(e) {
-      console.warn("Firebase offline or blocked:", e);
+    } catch (e) {
+      console.warn("Firebase Init bypassed:", e);
     }
 
-    function openLoginModal() {
-      document.getElementById('accountModal').classList.add('active');
-    }
-
-    function closeLoginModal() {
-      document.getElementById('accountModal').classList.remove('active');
-    }
-
-    function signInWithGoogle() {
-      if (!isFirebaseReady) {
-        alert("Connecting to Google requires internet connection.");
-        return;
+    function handleGoogleLogin() {
+      if (auth) {
+        document.getElementById('gBtn').innerText = "Connecting...";
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithRedirect(provider);
+      } else {
+        alert("Sign in using nickname below!");
       }
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => closeLoginModal())
-        .catch((err) => {
-          alert("Popup blocked or canceled. You can use Nickname below!");
-        });
     }
 
     function saveNickname() {
       const val = document.getElementById('nicknameInput').value.trim();
       if (val) {
-        localStorage.setItem('iq_player_name', val);
+        localStorage.setItem('iq_user_nickname', val);
         updateUserUI(val, null);
-        syncOnlineScore();
+        syncScore();
         closeLoginModal();
       }
     }
@@ -656,24 +749,13 @@
       iconEl.innerHTML = photo ? `<img src="${photo}">` : '👤';
     }
 
-    const ALL_CHARACTERS = [
-      { id: 'pikachu', tier: 1, name: 'Pikachu', bg: '#ffca28', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="32" fill="#ffd600"/><circle cx="38" cy="50" r="4" fill="#212121"/><circle cx="62" cy="50" r="4" fill="#212121"/><circle cx="28" cy="62" r="7" fill="#ff1744"/><circle cx="72" cy="62" r="7" fill="#ff1744"/></svg>` },
-      { id: 'doraemon', tier: 1, name: 'Doraemon', bg: '#03a9f4', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#0288d1"/><circle cx="50" cy="48" r="5" fill="#e53935"/></svg>` },
-      { id: 'tom', tier: 1, name: 'Tom', bg: '#546e7a', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="58" r="30" fill="#78909c"/><circle cx="50" cy="66" r="4" fill="#ff8a80"/></svg>` },
-      { id: 'jerry', tier: 1, name: 'Jerry', bg: '#8d6e63', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="60" r="26" fill="#a1887f"/><ellipse cx="50" cy="66" rx="4" ry="3" fill="#212121"/></svg>` },
-      { id: 'shinchan', tier: 1, name: 'Shinchan', bg: '#e53935', svg: `<svg viewBox="0 0 100 100"><circle cx="40" cy="48" r="5" fill="#212121"/><circle cx="60" cy="48" r="5" fill="#212121"/></svg>` },
-      { id: 'goku', tier: 2, name: 'Goku', bg: '#ff5722', svg: `<svg viewBox="0 0 100 100"><path d="M50 8 L35 32 L44 32 L20 48 L38 48 L14 74 L42 66 L34 92 L75 52 L54 52 L78 30 L60 30 Z" fill="#ffd600"/></svg>` },
-      { id: 'naruto', tier: 2, name: 'Naruto', bg: '#ff9800', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#ffe0b2"/><rect x="15" y="24" width="70" height="22" rx="4" fill="#263238"/></svg>` },
-      { id: 'sonic', tier: 2, name: 'Sonic', bg: '#1e88e5', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="26" fill="#ffe0b2"/><ellipse cx="50" cy="62" rx="4" ry="2.5" fill="#212121"/></svg>` },
-      { id: 'ben10', tier: 2, name: 'Ben 10', bg: '#2e7d32', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#212121"/><circle cx="50" cy="50" r="25" fill="#76ff03"/></svg>` },
-      { id: 'spiderman', tier: 3, name: 'Spidey', bg: '#b71c1c', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="32" ry="40" fill="#d32f2f"/></svg>` },
-      { id: 'batman', tier: 3, name: 'Batman', bg: '#263238', svg: `<svg viewBox="0 0 100 100"><path d="M50 25 Q35 15 25 35 Q10 50 25 72 Q50 90 50 90 Q50 90 75 72 Q90 50 75 35 Q65 15 50 25 Z" fill="#ffeb3b"/></svg>` },
-      { id: 'ironman', tier: 3, name: 'Iron Man', bg: '#880e4f', svg: `<svg viewBox="0 0 100 100"><rect x="34" y="48" width="12" height="4" rx="2" fill="#80d8ff"/></svg>` }
-    ];
+    function openLoginModal() { document.getElementById('accountModal').classList.add('active'); }
+    function closeLoginModal() { document.getElementById('accountModal').classList.remove('active'); }
 
-    let currentLevel = parseInt(localStorage.getItem('iq_test_saved_level')) || 1;
-    let maxUnlockedLevel = parseInt(localStorage.getItem('iq_test_unlocked_level')) || currentLevel;
-    let totalScore = parseInt(localStorage.getItem('iq_total_score')) || 0;
+    // --- 4. Game Logic & Level Progression ---
+    let currentLevel = parseInt(localStorage.getItem('iq_level')) || 1;
+    let maxUnlockedLevel = parseInt(localStorage.getItem('iq_max_level')) || currentLevel;
+    let totalScore = parseInt(localStorage.getItem('iq_score')) || 0;
 
     let movesLeft = 0, timeLeft = 0, pairsRemaining = 0;
     let activeCards = [], isLocked = false;
@@ -689,26 +771,30 @@
     const scoreVal = document.getElementById('scoreVal');
     const modal = document.getElementById('modal');
 
-    function syncOnlineScore() {
-      if (isFirebaseReady && navigator.onLine) {
-        let uid = currentUser ? currentUser.uid : (localStorage.getItem('iq_anon_id') || 'anon_' + Date.now());
-        localStorage.setItem('iq_anon_id', uid);
-        let pName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_player_name') || 'Guest Player');
-        db.ref('leaderboard/' + uid).set({
-          name: pName,
-          score: totalScore,
-          level: currentLevel,
-          updatedAt: Date.now()
-        });
-      }
-    }
-
     function computeConfig(lvl) {
-      let pairs = Math.min(8, 3 + Math.floor(lvl / 4));
+      let diffModes = [
+        { name: "EASY", color: "#00ff87", text: "#080914", tier: 1, pairs: 4, preview: 3, timeMult: 5.5, moveRatio: 2.5 },
+        { name: "NORMAL", color: "#38bdf8", text: "#080914", tier: 2, pairs: 6, preview: 3, timeMult: 4.8, moveRatio: 2.2 },
+        { name: "HARD", color: "#ffb703", text: "#080914", tier: 3, pairs: 8, preview: 2, timeMult: 3.8, moveRatio: 2.0 },
+        { name: "EXPERT", color: "#ff007f", text: "#ffffff", tier: 4, pairs: 10, preview: 2, timeMult: 3.2, moveRatio: 1.8 }
+      ];
+
+      let selectedDiff = lvl === 1 ? diffModes[0] : lvl === 2 ? diffModes[1] : diffModes[(lvl - 3) % diffModes.length];
+      let pairs = Math.min(12, selectedDiff.pairs + Math.floor(lvl / 10));
       let total = pairs * 2;
-      let cols = total <= 6 ? 3 : total <= 8 ? 4 : total <= 12 ? 4 : 4;
+      let cols = total <= 6 ? 3 : total <= 8 ? 4 : total <= 16 ? 4 : 5;
       let rows = Math.ceil(total / cols);
-      return { pairs, cols, rows, moves: pairs * 2 + 2, time: pairs * 4 + 10, previewTime: 2 };
+
+      return {
+        pairs, cols, rows,
+        moves: Math.round(pairs * selectedDiff.moveRatio),
+        time: Math.round(pairs * selectedDiff.timeMult),
+        previewTime: selectedDiff.preview,
+        diffName: selectedDiff.name,
+        diffColor: selectedDiff.color,
+        diffText: selectedDiff.text,
+        tier: selectedDiff.tier
+      };
     }
 
     function createCardElement(item) {
@@ -738,20 +824,25 @@
       timeLeft = conf.time;
 
       lvlBadge.innerText = lvl;
+      diffTag.innerText = conf.diffName;
+      diffTag.style.background = conf.diffColor;
+      diffTag.style.color = conf.diffText;
+
       levelVal.innerText = lvl;
       movesVal.innerText = movesLeft;
       scoreVal.innerText = totalScore;
+      timerVal.classList.remove('danger', 'memorize');
 
       board.style.gridTemplateColumns = `repeat(${conf.cols}, 1fr)`;
       board.style.gridTemplateRows = `repeat(${conf.rows}, 1fr)`;
       board.innerHTML = '';
 
-      let shuffledPool = [...ALL_CHARACTERS].sort(() => Math.random() - 0.5);
-      let selected = shuffledPool.slice(0, conf.pairs);
+      let pool = ALL_CHARACTERS.filter(c => c.tier <= conf.tier);
+      if (pool.length < conf.pairs) pool = ALL_CHARACTERS;
+      let selected = [...pool].sort(() => Math.random() - 0.5).slice(0, conf.pairs);
       let deck = [...selected, ...selected].sort(() => Math.random() - 0.5);
 
       deck.forEach(item => board.appendChild(createCardElement(item)));
-
       startPreviewPhase(conf.previewTime);
     }
 
@@ -769,9 +860,11 @@
         remaining--;
         if (remaining > 0) {
           timerVal.innerText = remaining + 's';
+          playTone(550, 'sine', 0.05);
         } else {
           clearInterval(previewInterval);
           all.forEach(c => c.classList.remove('preview'));
+          playTone(400, 'sine', 0.1);
           setTimeout(() => {
             isLocked = false;
             timerLabel.innerText = 'Time';
@@ -789,15 +882,21 @@
         if (timeLeft > 0) {
           timeLeft--;
           timerVal.innerText = timeLeft + 's';
+          if (timeLeft <= 5) {
+            timerVal.classList.add('danger');
+            playTone(450, 'sine', 0.05);
+          }
         } else {
           clearInterval(countdownInterval);
-          showModal(false, 'TIME EXPIRED', 'Try again!');
+          playSound('gameover');
+          showModal(false, 'TIME EXPIRED', 'Concentrate and try again!');
         }
       }, 1000);
     }
 
     function handleCardClick() {
       if (isLocked || this === activeCards[0] || this.classList.contains('matched') || this.classList.contains('preview')) return;
+      playSound('flip');
       this.classList.add('flipped');
       activeCards.push(this);
 
@@ -814,6 +913,7 @@
       if (c1.dataset.id === c2.dataset.id) {
         movesLeft++;
         movesVal.innerText = movesLeft;
+        playSound('match');
         c1.classList.add('matched');
         c2.classList.add('matched');
         pairsRemaining--;
@@ -824,15 +924,21 @@
           clearInterval(countdownInterval);
           if (currentLevel >= maxUnlockedLevel) {
             maxUnlockedLevel = currentLevel + 1;
-            localStorage.setItem('iq_test_unlocked_level', maxUnlockedLevel);
+            localStorage.setItem('iq_max_level', maxUnlockedLevel);
           }
-          totalScore += 100;
-          localStorage.setItem('iq_total_score', totalScore);
+          let pts = (timeLeft * 10) + (movesLeft * 20);
+          totalScore += pts;
+          localStorage.setItem('iq_score', totalScore);
           scoreVal.innerText = totalScore;
-          syncOnlineScore();
-          showModal(true, 'LEVEL CLEARED!', 'Great memory reflex!');
+          syncScore();
+
+          setTimeout(() => {
+            playSound('levelup');
+            showModal(true, 'LEVEL CLEARED!', `Bonus: +${pts} pts | Total IQ: ${totalScore}`);
+          }, 350);
         }
       } else {
+        playSound('wrong');
         c1.classList.add('wrong');
         c2.classList.add('wrong');
         setTimeout(() => {
@@ -842,13 +948,15 @@
           isLocked = false;
           if (movesLeft <= 0) {
             clearInterval(countdownInterval);
-            showModal(false, 'OUT OF MOVES', 'Try again!');
+            playSound('gameover');
+            showModal(false, 'OUT OF MOVES', 'You reached the move limit!');
           }
         }, 500);
       }
     }
 
     function showModal(isWin, title, desc) {
+      document.getElementById('modalIcon').innerText = isWin ? '🌟' : '💥';
       document.getElementById('modalTitle').innerText = title;
       document.getElementById('modalDesc').innerText = desc;
       const btn = document.getElementById('modalBtn');
@@ -857,63 +965,25 @@
         modal.classList.remove('active');
         if (isWin) {
           currentLevel++;
-          localStorage.setItem('iq_test_saved_level', currentLevel);
+          localStorage.setItem('iq_level', currentLevel);
         }
         initLevel(currentLevel);
       };
       modal.classList.add('active');
     }
 
-    function retryLevel() {
-      initLevel(currentLevel);
-    }
+    function retryLevel() { initLevel(currentLevel); }
 
     function confirmReset() {
-      if (confirm("Reset to Level 1?")) {
+      if (confirm('Reset to Level 1?')) {
         currentLevel = 1;
-        localStorage.setItem('iq_test_saved_level', 1);
+        maxUnlockedLevel = 1;
+        totalScore = 0;
+        localStorage.setItem('iq_level', 1);
+        localStorage.setItem('iq_max_level', 1);
+        localStorage.setItem('iq_score', 0);
         initLevel(1);
       }
-    }
-
-    function openLeaderboard() {
-      document.getElementById('leaderboardModal').classList.add('active');
-      const box = document.getElementById('leaderboardBox');
-      box.innerHTML = '<div style="padding:15px;color:#94a3b8;">Loading scores...</div>';
-
-      if (isFirebaseReady && navigator.onLine) {
-        db.ref('leaderboard').orderByChild('score').limitToLast(100).once('value', (snap) => {
-          let list = [];
-          snap.forEach(c => list.push(c.val()));
-          list.reverse();
-          renderLeaderboard(list);
-        }).catch(() => renderOfflineScores());
-      } else {
-        renderOfflineScores();
-      }
-    }
-
-    function renderOfflineScores() {
-      let myName = localStorage.getItem('iq_player_name') || 'You';
-      renderLeaderboard([
-        { name: myName, score: totalScore, level: currentLevel },
-        { name: "DragonMaster", score: 2400, level: 15 },
-        { name: "PikachuPro", score: 1800, level: 10 }
-      ]);
-    }
-
-    function renderLeaderboard(list) {
-      const box = document.getElementById('leaderboardBox');
-      box.innerHTML = list.map((p, idx) => `
-        <div class="leaderboard-row">
-          <span>#${idx+1} <b>${p.name}</b> <small style="color:#64748b;">(Lvl ${p.level||1})</small></span>
-          <span style="color:#ffb703;font-weight:800;">${p.score} pts</span>
-        </div>
-      `).join('');
-    }
-
-    function closeLeaderboard() {
-      document.getElementById('leaderboardModal').classList.remove('active');
     }
 
     function openLevelModal() {
@@ -927,7 +997,7 @@
         if (i <= maxUnlockedLevel) {
           b.onclick = () => {
             currentLevel = i;
-            localStorage.setItem('iq_test_saved_level', i);
+            localStorage.setItem('iq_level', i);
             closeLevelModal();
             initLevel(i);
           };
@@ -936,17 +1006,74 @@
       }
     }
 
-    function closeLevelModal() {
-      document.getElementById('levelModal').classList.remove('active');
+    function closeLevelModal() { document.getElementById('levelModal').classList.remove('active'); }
+
+    function syncScore() {
+      if (!db) return;
+      let pName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
+      let uid = currentUser ? currentUser.uid : (localStorage.getItem('iq_uid') || 'anon_' + Date.now());
+      localStorage.setItem('iq_uid', uid);
+      db.ref('leaderboard/' + uid).set({
+        name: pName,
+        score: totalScore,
+        level: currentLevel,
+        updatedAt: Date.now()
+      });
     }
 
+    function openLeaderboard() {
+      document.getElementById('leaderboardModal').classList.add('active');
+      const box = document.getElementById('leaderboardBox');
+      box.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;">Loading scores...</div>';
+
+      if (db && navigator.onLine) {
+        db.ref('leaderboard').orderByChild('score').limitToLast(100).once('value', snap => {
+          let list = [];
+          snap.forEach(c => list.push(c.val()));
+          list.reverse();
+          renderLeaderboard(list);
+        }).catch(() => renderOfflineScores());
+      } else {
+        renderOfflineScores();
+      }
+    }
+
+    function renderOfflineScores() {
+      let myName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
+      renderLeaderboard([
+        { name: myName, score: totalScore, level: currentLevel },
+        { name: "ShinchanFan", score: 3400, level: 12 },
+        { name: "PikachuPro", score: 2100, level: 8 }
+      ]);
+    }
+
+    function renderLeaderboard(list) {
+      const box = document.getElementById('leaderboardBox');
+      let myName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
+      box.innerHTML = list.map((p, idx) => `
+        <div class="leaderboard-row" style="${p.name === myName ? 'border-color:#38bdf8;' : ''}">
+          <span>#${idx+1} <b>${p.name}</b> <small style="color:#64748b;">(Lvl ${p.level||1})</small></span>
+          <span style="color:#ffb703;font-weight:bold;">${p.score} pts</span>
+        </div>
+      `).join('');
+    }
+
+    function closeLeaderboard() { document.getElementById('leaderboardModal').classList.remove('active'); }
+
     window.addEventListener('load', () => {
+      let saved = localStorage.getItem('iq_user_nickname');
+      if (saved) updateUserUI(saved, null);
+
       setTimeout(() => {
         const s = document.getElementById('splashScreen');
         if (s) s.classList.add('hide');
-      }, 1000);
+        playSound('start');
+      }, 1200);
+
       initLevel(currentLevel);
     });
+
+    window.addEventListener('pointerdown', () => initAudio(), { once: true });
 </script>
   </body>
 </html>
