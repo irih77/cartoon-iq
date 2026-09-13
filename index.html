@@ -8,6 +8,7 @@
 	<!-- Firebase SDKs -->
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
 <style>
     :root {
@@ -66,6 +67,117 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+
+    .auth-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: radial-gradient(circle at 50% 20%, #1a1b3a 0%, #080914 75%);
+    }
+    .auth-screen.hidden {
+      display: none;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 380px;
+      padding: 24px 18px 18px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 24px 70px rgba(0,0,0,.65);
+      text-align: center;
+    }
+    .auth-logo { font-size: 42px; margin-bottom: 4px; }
+    .auth-title {
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg,#ff007f,#00f2fe);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .auth-subtitle {
+      margin: 8px 0 18px;
+      color:#94a3b8;
+      font-size:11px;
+      line-height:1.45;
+    }
+    .google-btn {
+      width:100%;
+      padding:11px;
+      border-radius:12px;
+      border:1px solid #334155;
+      background:#fff;
+      color:#111827;
+      font-size:12px;
+      font-weight:850;
+      cursor:pointer;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:9px;
+    }
+    .google-btn span {
+      font-size:18px;
+      font-weight:900;
+    }
+    .auth-divider {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:15px 0;
+      color:#64748b;
+      font-size:9px;
+      font-weight:800;
+    }
+    .auth-divider:before,.auth-divider:after {
+      content:"";
+      height:1px;
+      background:#334155;
+      flex:1;
+    }
+    .auth-input {
+      width:100%;
+      padding:11px;
+      margin-bottom:8px;
+      border-radius:10px;
+      border:1px solid #334155;
+      background:#1e293b;
+      color:#fff;
+      font-size:13px;
+      outline:none;
+      text-align:left;
+    }
+    .auth-input:focus { border-color:#38bdf8; }
+    .auth-secondary {
+      width:100%;
+      margin-top:8px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:transparent;
+      color:#cbd5e1;
+      font-size:11px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .auth-error {
+      min-height:18px;
+      margin-top:10px;
+      color:#ff6688;
+      font-size:10px;
+      line-height:1.35;
+    }
+    .auth-note {
+      margin-top:8px;
+      color:#64748b;
+      font-size:9px;
     }
 
     .header {
@@ -477,6 +589,30 @@
 	  <img src="splash.png" alt="Loading...">
 	</div>
 
+    <!-- Authentication Gate -->
+    <div class="auth-screen" id="authScreen">
+      <div class="auth-card">
+        <div class="auth-logo">🧠</div>
+        <div class="auth-title">CARTOON IQ</div>
+        <div class="auth-subtitle">Sign in to save your progress & join the Global Leaderboard</div>
+
+        <button class="google-btn" id="googleLoginBtn" onclick="signInWithGoogle()">
+          <span>G</span> Continue with Google
+        </button>
+
+        <div class="auth-divider"><span>OR</span></div>
+
+        <input class="auth-input" id="authEmail" type="email" autocomplete="email" placeholder="Email address">
+        <input class="auth-input" id="authPassword" type="password" autocomplete="current-password" placeholder="Password">
+
+        <button class="btn-main" id="emailLoginBtn" onclick="emailLogin()">LOGIN</button>
+        <button class="auth-secondary" onclick="emailRegister()">CREATE ACCOUNT</button>
+
+        <div class="auth-error" id="authError"></div>
+        <div class="auth-note">Your game data is linked to your Firebase account.</div>
+      </div>
+    </div>
+
 	<div class="header">
 	  <div class="title-row">
 		<div class="title-group">
@@ -526,6 +662,7 @@
 	  <button class="btn" onclick="openLevelModal()">🗺️ Levels</button>
 	  <button class="btn" onclick="retryLevel()">🔄 Retry</button>
 	  <button class="btn" onclick="confirmReset()">⏮️ Reset</button>
+	  <button class="btn" onclick="logoutUser()">🚪 Logout</button>
 	</div>
 
 	<!-- Win / Over Modal -->
@@ -676,34 +813,165 @@
 
     // --- 3. Firebase & Direct Realtime Database Sync ---
     const firebaseConfig = {
-      apiKey: "AIzaSyAoRfpIV4ovfNaevjBI7mDH9XsBgSAStJ4",
+      apiKey: "AIzaSyAoRfpzov4ovflLeevjBI7mDH9XsBgSAStJ4",
       authDomain: "cartoon-iq-game.firebaseapp.com",
+      databaseURL: "https://cartoon-iq-game-default-rtdb.firebaseio.com/",
       projectId: "cartoon-iq-game",
       storageBucket: "cartoon-iq-game.firebasestorage.app",
       messagingSenderId: "530818980258",
       appId: "1:530818980258:web:c4e7266e7c0300974cfafb",
-      databaseURL: "https://cartoon-iq-game-default-rtdb.firebaseio.com/"
+      measurementId: "G-PLSEHN633J"
     };
 
     let db = null;
+    let auth = null;
+    let currentUser = null;
     let playerName = localStorage.getItem('iq_player_name') || 'Bittu';
     let playerId = localStorage.getItem('iq_player_id');
-    if (!playerId) {
-      playerId = 'player_' + Math.random().toString(36).substring(2, 9);
-      localStorage.setItem('iq_player_id', playerId);
-    }
 
     try {
       if (window.firebase) {
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         db = firebase.database();
+        auth = firebase.auth();
       }
     } catch (e) {
-      console.warn("DB offline mode");
+      console.warn("Firebase initialization failed", e);
     }
 
-    document.getElementById('playerNameDisplay').innerText = playerName;
+    function showAuthError(message) {
+      const el = document.getElementById('authError');
+      if (el) el.innerText = message || '';
+    }
 
+    function setAuthBusy(busy) {
+      ['googleLoginBtn','emailLoginBtn'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = busy;
+      });
+    }
+
+    async function signInWithGoogle() {
+      if (!auth) return showAuthError('Firebase Auth is not initialized.');
+      showAuthError('');
+      setAuthBusy(true);
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        await auth.signInWithPopup(provider);
+      } catch (e) {
+        console.error(e);
+        showAuthError(e.code === 'auth/popup-blocked'
+          ? 'Popup was blocked. Please allow popups and try again.'
+          : (e.message || 'Google sign-in failed.'));
+      } finally {
+        setAuthBusy(false);
+      }
+    }
+
+    async function emailLogin() {
+      if (!auth) return showAuthError('Firebase Auth is not initialized.');
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      if (!email || !password) return showAuthError('Enter your email and password.');
+      showAuthError('');
+      setAuthBusy(true);
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (e) {
+        console.error(e);
+        const msg = {
+          'auth/invalid-email':'Please enter a valid email.',
+          'auth/user-not-found':'No account found with this email.',
+          'auth/wrong-password':'Incorrect password.',
+          'auth/invalid-credential':'Email or password is incorrect.'
+        }[e.code] || e.message || 'Login failed.';
+        showAuthError(msg);
+      } finally {
+        setAuthBusy(false);
+      }
+    }
+
+    async function emailRegister() {
+      if (!auth) return showAuthError('Firebase Auth is not initialized.');
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      if (!email || !password) return showAuthError('Enter an email and password.');
+      if (password.length < 6) return showAuthError('Password must be at least 6 characters.');
+      showAuthError('');
+      setAuthBusy(true);
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
+      } catch (e) {
+        console.error(e);
+        const msg = {
+          'auth/email-already-in-use':'An account already exists. Please log in.',
+          'auth/invalid-email':'Please enter a valid email.',
+          'auth/weak-password':'Password must be at least 6 characters.'
+        }[e.code] || e.message || 'Registration failed.';
+        showAuthError(msg);
+      } finally {
+        setAuthBusy(false);
+      }
+    }
+
+    async function logoutUser() {
+      if (!auth) return;
+      try {
+        await auth.signOut();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function handleSignedInUser(user) {
+      currentUser = user;
+      playerId = user.uid;
+
+      const fallbackName = user.displayName || (user.email ? user.email.split('@')[0] : 'Player');
+      playerName = localStorage.getItem('iq_player_name_' + user.uid) || fallbackName;
+
+      localStorage.setItem('iq_player_id', user.uid);
+      localStorage.setItem('iq_player_name', playerName);
+
+      document.getElementById('playerNameDisplay').innerText =
+        playerName.length > 7 ? playerName.slice(0, 6) + '..' : playerName;
+
+      document.getElementById('authScreen').classList.add('hidden');
+
+      // Restore this account's cloud progress, if present.
+      if (db) {
+        db.ref('players/' + user.uid).once('value').then(snap => {
+          const data = snap.val();
+          if (data) {
+            currentLevel = parseInt(data.level) || currentLevel;
+            maxUnlockedLevel = parseInt(data.maxUnlockedLevel) || maxUnlockedLevel;
+            totalScore = parseInt(data.score) || totalScore;
+            localStorage.setItem('iq_level', currentLevel);
+            localStorage.setItem('iq_max_level', maxUnlockedLevel);
+            localStorage.setItem('iq_score', totalScore);
+          }
+          syncScore();
+          initLevel(currentLevel);
+        }).catch(() => initLevel(currentLevel));
+      } else {
+        initLevel(currentLevel);
+      }
+    }
+
+    function handleSignedOutUser() {
+      currentUser = null;
+      document.getElementById('authScreen').classList.remove('hidden');
+      clearInterval(countdownInterval);
+      clearInterval(previewInterval);
+    }
+
+    if (auth) {
+      auth.onAuthStateChanged(user => {
+        if (user) handleSignedInUser(user);
+        else handleSignedOutUser();
+      });
+    }
     function openNameModal() {
       document.getElementById('changeNameInput').value = playerName;
       document.getElementById('nameModal').classList.add('active');
@@ -718,6 +986,7 @@
       if (val) {
         playerName = val;
         localStorage.setItem('iq_player_name', val);
+        if (currentUser) localStorage.setItem('iq_player_name_' + currentUser.uid, val);
         document.getElementById('playerNameDisplay').innerText = val.length > 7 ? val.slice(0, 6) + '..' : val;
         syncScore();
         closeNameModal();
@@ -725,13 +994,26 @@
     }
 
     function syncScore() {
-      if (!db) return;
-      db.ref('leaderboard/' + playerId).set({
+      if (!db || !currentUser) return;
+
+      const playerData = {
         name: playerName,
         score: totalScore,
         level: currentLevel,
-        updatedAt: Date.now()
-      });
+        maxUnlockedLevel: maxUnlockedLevel,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+      };
+
+      // Private account progress.
+      db.ref('players/' + currentUser.uid).update(playerData).catch(console.warn);
+
+      // Public leaderboard entry.
+      db.ref('leaderboard/' + currentUser.uid).set({
+        name: playerName,
+        score: totalScore,
+        level: currentLevel,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+      }).catch(console.warn);
     }
 
     // --- 4. Game Logic & Level Progression ---
@@ -1029,14 +1311,10 @@
     function closeLeaderboard() { document.getElementById('leaderboardModal').classList.remove('active'); }
 
     window.addEventListener('load', () => {
-      syncScore();
       setTimeout(() => {
         const s = document.getElementById('splashScreen');
         if (s) s.classList.add('hide');
-        playSound('start');
       }, 1200);
-
-      initLevel(currentLevel);
     });
 
     window.addEventListener('pointerdown', () => initAudio(), { once: true });
