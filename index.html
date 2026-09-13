@@ -3,7 +3,7 @@
   <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-	<title>CARTOON IQ - Global Leaderboard Edition</title>
+	<title>CARTOON IQ - Global Leaderboard + Firebase Auth</title>
 
 	<!-- Firebase SDKs -->
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -829,15 +829,28 @@
     let playerName = localStorage.getItem('iq_player_name') || 'Bittu';
     let playerId = localStorage.getItem('iq_player_id');
 
-    try {
-      if (window.firebase) {
+    function initFirebase() {
+      try {
+        if (!window.firebase) {
+          showAuthError('Firebase SDK did not load. Check your internet connection.');
+          return false;
+        }
+        if (typeof firebase.auth !== 'function') {
+          showAuthError('Firebase Auth SDK did not load. Please reload the page.');
+          return false;
+        }
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         db = firebase.database();
         auth = firebase.auth();
+        return true;
+      } catch (e) {
+        console.error('Firebase initialization failed:', e);
+        showAuthError('Firebase initialization failed: ' + (e.message || 'Unknown error'));
+        return false;
       }
-    } catch (e) {
-      console.warn("Firebase initialization failed", e);
     }
+
+    initFirebase();
 
     function showAuthError(message) {
       const el = document.getElementById('authError');
@@ -858,26 +871,34 @@
       try {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        try {
-          await auth.signInWithPopup(provider);
-        } catch (popupError) {
-          // Mobile browsers can block popups; use redirect as a fallback.
-          if (popupError && (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/popup-closed-by-user')) {
-            await auth.signInWithRedirect(provider);
-            return;
-          }
-          throw popupError;
+
+        // Redirect is more reliable than popups on mobile browsers.
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+          await auth.signInWithRedirect(provider);
+          return;
         }
+
+        await auth.signInWithPopup(provider);
       } catch (e) {
-        console.error(e);
-        showAuthError(e.code === 'auth/api-key-not-valid'
-          ? 'Firebase API key is invalid or restricted. Use the exact Web App config from Firebase Project Settings and check API-key restrictions.'
-          : (e.code === 'auth/unauthorized-domain'
-            ? 'This website is not an authorized Firebase domain. Add your GitHub Pages domain in Firebase Authentication → Settings → Authorized domains.'
-            : (e.message || 'Google sign-in failed.')));
+        console.error('Google sign-in error:', e);
+        showAuthError(formatFirebaseAuthError(e, 'Google sign-in failed.'));
       } finally {
         setAuthBusy(false);
       }
+    }
+
+    function formatFirebaseAuthError(e, fallback) {
+      const code = e && e.code ? e.code : '';
+      if (code === 'auth/api-key-not-valid') {
+        return 'Firebase API key is invalid/restricted. Check Google Cloud → APIs & Services → Credentials and use the Web API key for cartoon-iq-game.';
+      }
+      if (code === 'auth/unauthorized-domain') {
+        return 'Add irih77.github.io in Firebase Console → Authentication → Settings → Authorized domains.';
+      }
+      if (code === 'auth/popup-blocked') return 'Popup blocked. Please allow popups or use the mobile redirect sign-in.';
+      if (code === 'auth/popup-closed-by-user') return 'Google sign-in was cancelled.';
+      return (e && e.message) || fallback;
     }
 
     async function emailLogin() {
@@ -895,7 +916,9 @@
           'auth/invalid-email':'Please enter a valid email.',
           'auth/user-not-found':'No account found with this email.',
           'auth/wrong-password':'Incorrect password.',
-          'auth/invalid-credential':'Email or password is incorrect.'
+          'auth/invalid-credential':'Email or password is incorrect.',
+          'auth/api-key-not-valid':'Firebase API key is invalid/restricted. Check Google Cloud → APIs & Services → Credentials.',
+          'auth/operation-not-allowed':'Enable Email/Password in Firebase Console → Authentication → Sign-in method.'
         }[e.code] || e.message || 'Login failed.';
         showAuthError(msg);
       } finally {
@@ -918,7 +941,9 @@
         const msg = {
           'auth/email-already-in-use':'An account already exists. Please log in.',
           'auth/invalid-email':'Please enter a valid email.',
-          'auth/weak-password':'Password must be at least 6 characters.'
+          'auth/weak-password':'Password must be at least 6 characters.',
+          'auth/api-key-not-valid':'Firebase API key is invalid/restricted. Check Google Cloud → APIs & Services → Credentials.',
+          'auth/operation-not-allowed':'Enable Email/Password in Firebase Console → Authentication → Sign-in method.'
         }[e.code] || e.message || 'Registration failed.';
         showAuthError(msg);
       } finally {
@@ -978,6 +1003,11 @@
     }
 
     if (auth) {
+      auth.getRedirectResult().catch(e => {
+        console.error('Google redirect error:', e);
+        showAuthError(formatFirebaseAuthError(e, 'Google sign-in failed.'));
+      });
+
       auth.onAuthStateChanged(user => {
         if (user) handleSignedInUser(user);
         else handleSignedOutUser();
