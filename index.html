@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+	<title>IQ TEST by Bittu - 100% Stable Edition</title>
+
+	<!-- Firebase SDKs -->
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 20%, #1a1b3a 0%, #080914 100%);
+      --accent: #ff007f;
+      --accent-glow: rgba(255, 0, 127, 0.4);
+      --purple: #7928ca;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --success: #00ff87;
+      --danger: #ff0055;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+	
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-gradient);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      padding: env(safe-area-inset-top, 8px) 12px env(safe-area-inset-bottom, 10px) 12px;
+      position: relative;
+    }
+
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #080a10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .splash-screen.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 4px;
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .logo-badge {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      background: linear-gradient(135deg, #ff007f, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .creator-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.8px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sound-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .user-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 5px 9px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .user-btn img {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .streak-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      padding: 5px 9px;
+      border-radius: 18px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffb703;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .diff-tag {
+      background: #00ff87;
+      color: #080914;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 8px 10px;
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .hud-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hud-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    .hud-val {
+      font-size: 15px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-top: 1px;
+    }
+
+    .hud-val.danger {
+      color: var(--danger);
+      animation: flash 0.6s infinite alternate;
+    }
+
+    .hud-val.memorize {
+      color: #ffb703;
+      animation: flash 0.5s infinite alternate;
+    }
+
+    .board-viewport {
+      width: 100%;
+      max-width: 480px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px 0;
+      position: relative;
+    }
+
+    .grid-board {
+      display: grid;
+      gap: 6px;
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      justify-content: center;
+      align-content: center;
+      perspective: 1000px;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 55px;
+      transform-style: preserve-3d;
+      transition: transform 0.35s ease;
+      cursor: pointer;
+    }
+
+    .card.flipped, .card.matched, .card.preview {
+      transform: rotateY(180deg) !important;
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #241442, #100b21);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      z-index: 2;
+    }
+
+    .card-front::after {
+      content: '⚡';
+      font-size: 18px;
+      opacity: 0.4;
+    }
+
+    .card-back {
+      background: #111424;
+      border: 2px solid var(--accent);
+      transform: rotateY(180deg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .char-card-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 4px;
+    }
+
+    .char-card-wrap svg {
+      width: 70%;
+      height: 70%;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .char-label {
+      position: absolute;
+      bottom: 2px;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1px 5px;
+      border-radius: 6px;
+    }
+
+    .card.matched .card-back {
+      border-color: var(--success);
+      box-shadow: 0 0 12px rgba(0, 255, 135, 0.6);
+    }
+
+    .card.wrong {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: rotateY(180deg) translateX(0); }
+      20%, 60% { transform: rotateY(180deg) translateX(-6px); }
+      40%, 80% { transform: rotateY(180deg) translateX(6px); }
+    }
+
+    .footer-credit {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .footer-credit span {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .controls {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 0;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      padding: 22px 18px;
+      border-radius: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .btn-main {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding: 8px 4px 16px 4px;
+      margin-bottom: 12px;
+    }
+
+    .lvl-btn {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .lvl-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-color: #fff;
+      color: #fff;
+    }
+
+    .lvl-btn.unlocked:not(.active) {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .lvl-btn.locked {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.05);
+      color: #64748b;
+    }
+
+    .leaderboard-box {
+      max-height: 240px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .leaderboard-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .leaderboard-row.my-rank {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+</style>
+  </head>
+  <body>
+
+	<div class="splash-screen" id="splashScreen">
+	  <img src="splash.png" alt="Loading...">
+	</div>
+
+	<div class="header">
+	  <div class="title-row">
+		<div class="title-group">
+		  <div class="logo-badge">CARTOON IQ</div>
+		  <div class="creator-tag">BY BITTU</div>
+		</div>
+		<div class="top-actions">
+		  <button class="sound-btn" id="soundToggle" onclick="toggleSound()">🔊</button>
+		  <button class="user-btn" id="loginBtn" onclick="openLoginModal()">
+			<span id="userPicIcon">👤</span> <span id="userNameDisplay">LOGIN</span>
+		  </button>
+		  <button class="streak-badge" onclick="openLevelModal()">
+			🗺️ <span id="lvlBadge">1</span>
+			<span class="diff-tag" id="diffTag">EASY</span>
+		  </button>
+		</div>
+	  </div>
+
+	  <div class="hud">
+		<div class="hud-box">
+		  <span class="hud-label">Level</span>
+		  <span class="hud-val" id="levelVal">1</span>
+		</div>
+		<div class="hud-box">
+		  <span class="hud-label" id="timerLabel">Time</span>
+		  <span class="hud-val" id="timerVal">--</span>
+		</div>
+		<div class="hud-box">
+		  <span class="hud-label">Moves</span>
+		  <span class="hud-val" id="movesVal">--</span>
+		</div>
+		<div class="hud-box">
+		  <span class="hud-label">IQ Score</span>
+		  <span class="hud-val" id="scoreVal" style="color:#ffb703;">0</span>
+		</div>
+	  </div>
+	</div>
+
+	<div class="board-viewport">
+	  <div class="grid-board" id="board"></div>
+	</div>
+
+	<div class="footer-credit">DEVELOPED BY <span>BITTU</span></div>
+
+	<div class="controls">
+	  <button class="btn" onclick="openLeaderboard()">🏆 Top 100</button>
+	  <button class="btn" onclick="openLevelModal()">🗺️ Levels</button>
+	  <button class="btn" onclick="retryLevel()">🔄 Retry</button>
+	  <button class="btn" onclick="confirmReset()">⏮️ Reset</button>
+	</div>
+
+	<!-- Modals -->
+	<div class="modal-overlay" id="modal">
+	  <div class="modal-card">
+		<div style="font-size:36px;margin-bottom:6px;" id="modalIcon">🎉</div>
+		<div style="font-size:18px;font-weight:800;color:#fff;" id="modalTitle">LEVEL CLEARED</div>
+		<div style="font-size:12px;color:#94a3b8;margin:8px 0 16px;" id="modalDesc">Brain reflex sharp!</div>
+		<button class="btn-main" id="modalBtn">NEXT LEVEL</button>
+	  </div>
+	</div>
+
+	<div class="modal-overlay" id="levelModal">
+	  <div class="modal-card">
+		<div style="font-size:32px;">🗺️</div>
+		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">SELECT LEVEL</div>
+		<div class="level-grid" id="levelGrid"></div>
+		<button class="btn-main" onclick="closeLevelModal()">CLOSE</button>
+	  </div>
+	</div>
+
+	<!-- Account Modal (Google + Nickname) -->
+	<div class="modal-overlay" id="accountModal">
+	  <div class="modal-card">
+		<div style="font-size:32px;">👤</div>
+		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">PLAYER PROFILE</div>
+		<div style="font-size:12px;color:#94a3b8;margin-bottom:14px;">Sign in with Google or set a nickname</div>
+		
+		<button class="btn-main" style="background:#4285f4;margin-bottom:10px;" onclick="signInWithGoogle()">
+		  🌐 SIGN IN WITH GOOGLE
+		</button>
+		
+		<div style="display:flex;gap:6px;margin-bottom:12px;">
+		  <input type="text" id="nicknameInput" placeholder="Or enter Nickname" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:12px;outline:none;">
+		  <button class="btn" style="flex:0 0 70px;background:#38bdf8;color:#000;font-weight:800;" onclick="saveNickname()">SAVE</button>
+		</div>
+
+		<button class="btn-main" style="background:transparent;border:1px solid rgba(255,255,255,0.2);" onclick="closeLoginModal()">CLOSE</button>
+	  </div>
+	</div>
+
+	<div class="modal-overlay" id="leaderboardModal">
+	  <div class="modal-card">
+		<div style="font-size:32px;">🏆</div>
+		<div style="font-size:18px;font-weight:800;color:#fff;margin:6px 0;">TOP 100 RANKING</div>
+		<div class="leaderboard-box" id="leaderboardBox"></div>
+		<button class="btn-main" onclick="closeLeaderboard()">CLOSE</button>
+	  </div>
+	</div>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoRfpzV4ovflLeevjBI7mDH9XsBgSAStJ4",
+      authDomain: "cartoon-iq-game.firebaseapp.com",
+      projectId: "cartoon-iq-game",
+      databaseURL: "https://cartoon-iq-game-default-rtdb.firebaseio.com/"
+    };
+
+    let auth = null, db = null, currentUser = null, isFirebaseReady = false;
+
+    try {
+      if (window.firebase && firebaseConfig.apiKey) {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.database();
+        isFirebaseReady = true;
+
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            currentUser = user;
+            updateUserUI(user.displayName, user.photoURL);
+            syncOnlineScore();
+          } else {
+            currentUser = null;
+            let localName = localStorage.getItem('iq_player_name') || 'LOGIN';
+            updateUserUI(localName, null);
+          }
+        });
+      }
+    } catch(e) {
+      console.warn("Firebase offline or blocked:", e);
+    }
+
+    function openLoginModal() {
+      document.getElementById('accountModal').classList.add('active');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('accountModal').classList.remove('active');
+    }
+
+    function signInWithGoogle() {
+      if (!isFirebaseReady) {
+        alert("Connecting to Google requires internet connection.");
+        return;
+      }
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => closeLoginModal())
+        .catch((err) => {
+          alert("Popup blocked or canceled. You can use Nickname below!");
+        });
+    }
+
+    function saveNickname() {
+      const val = document.getElementById('nicknameInput').value.trim();
+      if (val) {
+        localStorage.setItem('iq_player_name', val);
+        updateUserUI(val, null);
+        syncOnlineScore();
+        closeLoginModal();
+      }
+    }
+
+    function updateUserUI(name, photo) {
+      const nameEl = document.getElementById('userNameDisplay');
+      const iconEl = document.getElementById('userPicIcon');
+      nameEl.innerText = name ? (name.length > 7 ? name.slice(0, 6) + '..' : name) : 'LOGIN';
+      iconEl.innerHTML = photo ? `<img src="${photo}">` : '👤';
+    }
+
+    const ALL_CHARACTERS = [
+      { id: 'pikachu', tier: 1, name: 'Pikachu', bg: '#ffca28', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="32" fill="#ffd600"/><circle cx="38" cy="50" r="4" fill="#212121"/><circle cx="62" cy="50" r="4" fill="#212121"/><circle cx="28" cy="62" r="7" fill="#ff1744"/><circle cx="72" cy="62" r="7" fill="#ff1744"/></svg>` },
+      { id: 'doraemon', tier: 1, name: 'Doraemon', bg: '#03a9f4', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#0288d1"/><circle cx="50" cy="48" r="5" fill="#e53935"/></svg>` },
+      { id: 'tom', tier: 1, name: 'Tom', bg: '#546e7a', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="58" r="30" fill="#78909c"/><circle cx="50" cy="66" r="4" fill="#ff8a80"/></svg>` },
+      { id: 'jerry', tier: 1, name: 'Jerry', bg: '#8d6e63', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="60" r="26" fill="#a1887f"/><ellipse cx="50" cy="66" rx="4" ry="3" fill="#212121"/></svg>` },
+      { id: 'shinchan', tier: 1, name: 'Shinchan', bg: '#e53935', svg: `<svg viewBox="0 0 100 100"><circle cx="40" cy="48" r="5" fill="#212121"/><circle cx="60" cy="48" r="5" fill="#212121"/></svg>` },
+      { id: 'goku', tier: 2, name: 'Goku', bg: '#ff5722', svg: `<svg viewBox="0 0 100 100"><path d="M50 8 L35 32 L44 32 L20 48 L38 48 L14 74 L42 66 L34 92 L75 52 L54 52 L78 30 L60 30 Z" fill="#ffd600"/></svg>` },
+      { id: 'naruto', tier: 2, name: 'Naruto', bg: '#ff9800', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#ffe0b2"/><rect x="15" y="24" width="70" height="22" rx="4" fill="#263238"/></svg>` },
+      { id: 'sonic', tier: 2, name: 'Sonic', bg: '#1e88e5', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="26" fill="#ffe0b2"/><ellipse cx="50" cy="62" rx="4" ry="2.5" fill="#212121"/></svg>` },
+      { id: 'ben10', tier: 2, name: 'Ben 10', bg: '#2e7d32', svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#212121"/><circle cx="50" cy="50" r="25" fill="#76ff03"/></svg>` },
+      { id: 'spiderman', tier: 3, name: 'Spidey', bg: '#b71c1c', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="32" ry="40" fill="#d32f2f"/></svg>` },
+      { id: 'batman', tier: 3, name: 'Batman', bg: '#263238', svg: `<svg viewBox="0 0 100 100"><path d="M50 25 Q35 15 25 35 Q10 50 25 72 Q50 90 50 90 Q50 90 75 72 Q90 50 75 35 Q65 15 50 25 Z" fill="#ffeb3b"/></svg>` },
+      { id: 'ironman', tier: 3, name: 'Iron Man', bg: '#880e4f', svg: `<svg viewBox="0 0 100 100"><rect x="34" y="48" width="12" height="4" rx="2" fill="#80d8ff"/></svg>` }
+    ];
+
+    let currentLevel = parseInt(localStorage.getItem('iq_test_saved_level')) || 1;
+    let maxUnlockedLevel = parseInt(localStorage.getItem('iq_test_unlocked_level')) || currentLevel;
+    let totalScore = parseInt(localStorage.getItem('iq_total_score')) || 0;
+
+    let movesLeft = 0, timeLeft = 0, pairsRemaining = 0;
+    let activeCards = [], isLocked = false;
+    let countdownInterval = null, previewInterval = null;
+
+    const board = document.getElementById('board');
+    const lvlBadge = document.getElementById('lvlBadge');
+    const diffTag = document.getElementById('diffTag');
+    const levelVal = document.getElementById('levelVal');
+    const timerLabel = document.getElementById('timerLabel');
+    const timerVal = document.getElementById('timerVal');
+    const movesVal = document.getElementById('movesVal');
+    const scoreVal = document.getElementById('scoreVal');
+    const modal = document.getElementById('modal');
+
+    function syncOnlineScore() {
+      if (isFirebaseReady && navigator.onLine) {
+        let uid = currentUser ? currentUser.uid : (localStorage.getItem('iq_anon_id') || 'anon_' + Date.now());
+        localStorage.setItem('iq_anon_id', uid);
+        let pName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_player_name') || 'Guest Player');
+        db.ref('leaderboard/' + uid).set({
+          name: pName,
+          score: totalScore,
+          level: currentLevel,
+          updatedAt: Date.now()
+        });
+      }
+    }
+
+    function computeConfig(lvl) {
+      let pairs = Math.min(8, 3 + Math.floor(lvl / 4));
+      let total = pairs * 2;
+      let cols = total <= 6 ? 3 : total <= 8 ? 4 : total <= 12 ? 4 : 4;
+      let rows = Math.ceil(total / cols);
+      return { pairs, cols, rows, moves: pairs * 2 + 2, time: pairs * 4 + 10, previewTime: 2 };
+    }
+
+    function createCardElement(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.id = item.id;
+      card.innerHTML = `
+        <div class="card-face card-front"></div>
+        <div class="card-face card-back" style="background: ${item.bg};">
+          <div class="char-card-wrap">
+            ${item.svg}
+            <div class="char-label">${item.name}</div>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', handleCardClick);
+      return card;
+    }
+
+    function initLevel(lvl) {
+      clearInterval(countdownInterval);
+      clearInterval(previewInterval);
+
+      const conf = computeConfig(lvl);
+      pairsRemaining = conf.pairs;
+      movesLeft = conf.moves;
+      timeLeft = conf.time;
+
+      lvlBadge.innerText = lvl;
+      levelVal.innerText = lvl;
+      movesVal.innerText = movesLeft;
+      scoreVal.innerText = totalScore;
+
+      board.style.gridTemplateColumns = `repeat(${conf.cols}, 1fr)`;
+      board.style.gridTemplateRows = `repeat(${conf.rows}, 1fr)`;
+      board.innerHTML = '';
+
+      let shuffledPool = [...ALL_CHARACTERS].sort(() => Math.random() - 0.5);
+      let selected = shuffledPool.slice(0, conf.pairs);
+      let deck = [...selected, ...selected].sort(() => Math.random() - 0.5);
+
+      deck.forEach(item => board.appendChild(createCardElement(item)));
+
+      startPreviewPhase(conf.previewTime);
+    }
+
+    function startPreviewPhase(seconds) {
+      isLocked = true;
+      let remaining = seconds;
+      timerLabel.innerText = 'LOOK!';
+      timerVal.innerText = remaining + 's';
+      timerVal.classList.add('memorize');
+
+      const all = document.querySelectorAll('.card');
+      all.forEach(c => c.classList.add('preview'));
+
+      previewInterval = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+          timerVal.innerText = remaining + 's';
+        } else {
+          clearInterval(previewInterval);
+          all.forEach(c => c.classList.remove('preview'));
+          setTimeout(() => {
+            isLocked = false;
+            timerLabel.innerText = 'Time';
+            timerVal.classList.remove('memorize');
+            timerVal.innerText = timeLeft + 's';
+            startTimer();
+          }, 300);
+        }
+      }, 1000);
+    }
+
+    function startTimer() {
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          timerVal.innerText = timeLeft + 's';
+        } else {
+          clearInterval(countdownInterval);
+          showModal(false, 'TIME EXPIRED', 'Try again!');
+        }
+      }, 1000);
+    }
+
+    function handleCardClick() {
+      if (isLocked || this === activeCards[0] || this.classList.contains('matched') || this.classList.contains('preview')) return;
+      this.classList.add('flipped');
+      activeCards.push(this);
+
+      if (activeCards.length === 2) {
+        movesLeft--;
+        movesVal.innerText = movesLeft;
+        isLocked = true;
+        evaluatePair();
+      }
+    }
+
+    function evaluatePair() {
+      const [c1, c2] = activeCards;
+      if (c1.dataset.id === c2.dataset.id) {
+        movesLeft++;
+        movesVal.innerText = movesLeft;
+        c1.classList.add('matched');
+        c2.classList.add('matched');
+        pairsRemaining--;
+        activeCards = [];
+        isLocked = false;
+
+        if (pairsRemaining === 0) {
+          clearInterval(countdownInterval);
+          if (currentLevel >= maxUnlockedLevel) {
+            maxUnlockedLevel = currentLevel + 1;
+            localStorage.setItem('iq_test_unlocked_level', maxUnlockedLevel);
+          }
+          totalScore += 100;
+          localStorage.setItem('iq_total_score', totalScore);
+          scoreVal.innerText = totalScore;
+          syncOnlineScore();
+          showModal(true, 'LEVEL CLEARED!', 'Great memory reflex!');
+        }
+      } else {
+        c1.classList.add('wrong');
+        c2.classList.add('wrong');
+        setTimeout(() => {
+          c1.classList.remove('flipped', 'wrong');
+          c2.classList.remove('flipped', 'wrong');
+          activeCards = [];
+          isLocked = false;
+          if (movesLeft <= 0) {
+            clearInterval(countdownInterval);
+            showModal(false, 'OUT OF MOVES', 'Try again!');
+          }
+        }, 500);
+      }
+    }
+
+    function showModal(isWin, title, desc) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalDesc').innerText = desc;
+      const btn = document.getElementById('modalBtn');
+      btn.innerText = isWin ? 'NEXT LEVEL' : 'TRY AGAIN';
+      btn.onclick = () => {
+        modal.classList.remove('active');
+        if (isWin) {
+          currentLevel++;
+          localStorage.setItem('iq_test_saved_level', currentLevel);
+        }
+        initLevel(currentLevel);
+      };
+      modal.classList.add('active');
+    }
+
+    function retryLevel() {
+      initLevel(currentLevel);
+    }
+
+    function confirmReset() {
+      if (confirm("Reset to Level 1?")) {
+        currentLevel = 1;
+        localStorage.setItem('iq_test_saved_level', 1);
+        initLevel(1);
+      }
+    }
+
+    function openLeaderboard() {
+      document.getElementById('leaderboardModal').classList.add('active');
+      const box = document.getElementById('leaderboardBox');
+      box.innerHTML = '<div style="padding:15px;color:#94a3b8;">Loading scores...</div>';
+
+      if (isFirebaseReady && navigator.onLine) {
+        db.ref('leaderboard').orderByChild('score').limitToLast(100).once('value', (snap) => {
+          let list = [];
+          snap.forEach(c => list.push(c.val()));
+          list.reverse();
+          renderLeaderboard(list);
+        }).catch(() => renderOfflineScores());
+      } else {
+        renderOfflineScores();
+      }
+    }
+
+    function renderOfflineScores() {
+      let myName = localStorage.getItem('iq_player_name') || 'You';
+      renderLeaderboard([
+        { name: myName, score: totalScore, level: currentLevel },
+        { name: "DragonMaster", score: 2400, level: 15 },
+        { name: "PikachuPro", score: 1800, level: 10 }
+      ]);
+    }
+
+    function renderLeaderboard(list) {
+      const box = document.getElementById('leaderboardBox');
+      box.innerHTML = list.map((p, idx) => `
+        <div class="leaderboard-row">
+          <span>#${idx+1} <b>${p.name}</b> <small style="color:#64748b;">(Lvl ${p.level||1})</small></span>
+          <span style="color:#ffb703;font-weight:800;">${p.score} pts</span>
+        </div>
+      `).join('');
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('leaderboardModal').classList.remove('active');
+    }
+
+    function openLevelModal() {
+      document.getElementById('levelModal').classList.add('active');
+      const grid = document.getElementById('levelGrid');
+      grid.innerHTML = '';
+      for (let i = 1; i <= Math.max(30, maxUnlockedLevel + 2); i++) {
+        const b = document.createElement('button');
+        b.className = `lvl-btn ${i === currentLevel ? 'active' : i <= maxUnlockedLevel ? 'unlocked' : 'locked'}`;
+        b.innerText = i <= maxUnlockedLevel ? i : '🔒';
+        if (i <= maxUnlockedLevel) {
+          b.onclick = () => {
+            currentLevel = i;
+            localStorage.setItem('iq_test_saved_level', i);
+            closeLevelModal();
+            initLevel(i);
+          };
+        }
+        grid.appendChild(b);
+      }
+    }
+
+    function closeLevelModal() {
+      document.getElementById('levelModal').classList.remove('active');
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const s = document.getElementById('splashScreen');
+        if (s) s.classList.add('hide');
+      }, 1000);
+      initLevel(currentLevel);
+    });
+</script>
+  </body>
+</html>
