@@ -3,11 +3,10 @@
   <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-	<title>IQ TEST by Bittu - Full Cartoon Edition</title>
+	<title>CARTOON IQ - Global Leaderboard Edition</title>
 
 	<!-- Firebase SDKs -->
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
@@ -46,7 +45,6 @@
       position: relative;
     }
 
-    /* Startup Splash Screen */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -130,23 +128,17 @@
     }
 
     .user-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--card-border);
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
       border-radius: 18px;
-      padding: 4px 8px;
+      padding: 4px 10px;
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
       color: #38bdf8;
       cursor: pointer;
-    }
-
-    .user-btn img {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
     }
 
     .streak-badge {
@@ -493,8 +485,8 @@
 		</div>
 		<div class="top-actions">
 		  <button class="sound-btn" id="soundToggle" onclick="toggleSound()">🔊</button>
-		  <button class="user-btn" id="loginBtn" onclick="openLoginModal()">
-			<span id="userPicIcon">👤</span> <span id="userNameDisplay">LOGIN</span>
+		  <button class="user-btn" id="nameChangeBtn" onclick="openNameModal()">
+			✏️ <span id="playerNameDisplay">Bittu</span>
 		  </button>
 		  <button class="streak-badge" onclick="openLevelModal()">
 			🗺️ <span id="lvlBadge">1</span>
@@ -556,23 +548,19 @@
 	  </div>
 	</div>
 
-	<!-- Player Profile Modal -->
-	<div class="modal-overlay" id="accountModal">
+	<!-- Name Change Modal -->
+	<div class="modal-overlay" id="nameModal">
 	  <div class="modal-card">
-		<div style="font-size:32px;">👤</div>
-		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">PLAYER PROFILE</div>
-		<div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">Sign in with Google or save a nickname</div>
-		
-		<button class="btn-main" id="gBtn" style="background:#4285f4;margin-bottom:10px;" onclick="handleGoogleLogin()">
-		  🌐 SIGN IN WITH GOOGLE
-		</button>
+		<div style="font-size:32px;">✏️</div>
+		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">YOUR PLAYER NAME</div>
+		<div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">This name will appear on the Global Top 100 Leaderboard</div>
 		
 		<div style="display:flex;gap:6px;margin-bottom:10px;">
-		  <input type="text" id="nicknameInput" placeholder="Enter Nickname" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:12px;outline:none;">
-		  <button class="btn" style="flex:0 0 70px;background:#38bdf8;color:#000;font-weight:800;" onclick="saveNickname()">SAVE</button>
+		  <input type="text" id="changeNameInput" placeholder="Enter your name" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:13px;outline:none;text-align:center;font-weight:bold;">
+		  <button class="btn" style="flex:0 0 70px;background:#38bdf8;color:#000;font-weight:800;" onclick="savePlayerName()">SAVE</button>
 		</div>
 
-		<button class="btn-main" style="background:transparent;border:1px solid rgba(255,255,255,0.2);" onclick="closeLoginModal()">CLOSE</button>
+		<button class="btn-main" style="background:transparent;border:1px solid rgba(255,255,255,0.2);" onclick="closeNameModal()">CLOSE</button>
 	  </div>
 	</div>
 
@@ -580,7 +568,7 @@
 	<div class="modal-overlay" id="leaderboardModal">
 	  <div class="modal-card">
 		<div style="font-size:30px;">🏆</div>
-		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">TOP 100 RANKING</div>
+		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">TOP 100 GLOBAL RANKING</div>
 		<div class="leaderboard-box" id="leaderboardBox"></div>
 		<button class="btn-main" onclick="closeLeaderboard()">CLOSE</button>
 	  </div>
@@ -686,71 +674,60 @@
       { id: 'pinkpanther', tier: 4, name: 'Pink Panther', bg: '#880e4f', svg: `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="28" ry="38" fill="#f48fb1"/><circle cx="24" cy="24" r="10" fill="#f06292"/><circle cx="76" cy="24" r="10" fill="#f06292"/></svg>` }
     ];
 
-    // --- 3. Firebase & Fallback Auth ---
+    // --- 3. Firebase & Direct Realtime Database Sync ---
     const firebaseConfig = {
       apiKey: "AIzaSyAoRfpzV4ovflLeevjBI7mDH9XsBgSAStJ4",
-      authDomain: "cartoon-iq-game.firebaseapp.com",
-      projectId: "cartoon-iq-game",
       databaseURL: "https://cartoon-iq-game-default-rtdb.firebaseio.com/"
     };
 
-    let auth = null, db = null, currentUser = null;
+    let db = null;
+    let playerName = localStorage.getItem('iq_player_name') || 'Bittu';
+    let playerId = localStorage.getItem('iq_player_id');
+    if (!playerId) {
+      playerId = 'player_' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('iq_player_id', playerId);
+    }
 
     try {
       if (window.firebase) {
         firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
         db = firebase.database();
-
-        auth.getRedirectResult().then(res => {
-          if (res && res.user) {
-            currentUser = res.user;
-            updateUserUI(res.user.displayName, res.user.photoURL);
-            syncScore();
-          }
-        }).catch(e => console.warn(e));
-
-        auth.onAuthStateChanged(user => {
-          if (user) {
-            currentUser = user;
-            updateUserUI(user.displayName, user.photoURL);
-            syncScore();
-          }
-        });
       }
     } catch (e) {
-      console.warn("Firebase Init bypassed:", e);
+      console.warn("DB offline mode");
     }
 
-    function handleGoogleLogin() {
-      if (auth) {
-        document.getElementById('gBtn').innerText = "Connecting...";
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithRedirect(provider);
-      } else {
-        alert("Sign in using nickname below!");
-      }
+    document.getElementById('playerNameDisplay').innerText = playerName;
+
+    function openNameModal() {
+      document.getElementById('changeNameInput').value = playerName;
+      document.getElementById('nameModal').classList.add('active');
     }
 
-    function saveNickname() {
-      const val = document.getElementById('nicknameInput').value.trim();
+    function closeNameModal() {
+      document.getElementById('nameModal').classList.remove('active');
+    }
+
+    function savePlayerName() {
+      const val = document.getElementById('changeNameInput').value.trim();
       if (val) {
-        localStorage.setItem('iq_user_nickname', val);
-        updateUserUI(val, null);
+        playerName = val;
+        localStorage.setItem('iq_player_name', val);
+        document.getElementById('playerNameDisplay').innerText = val.length > 7 ? val.slice(0, 6) + '..' : val;
         syncScore();
-        closeLoginModal();
+        closeNameModal();
       }
     }
 
-    function updateUserUI(name, photo) {
-      const nameEl = document.getElementById('userNameDisplay');
-      const iconEl = document.getElementById('userPicIcon');
-      nameEl.innerText = name ? (name.length > 7 ? name.slice(0, 6) + '..' : name) : 'LOGIN';
-      iconEl.innerHTML = photo ? `<img src="${photo}">` : '👤';
+    function syncScore() {
+      if (!db) return;
+      db.ref('leaderboard/' + playerId).set({
+        name: playerName,
+        score: totalScore,
+        level: currentLevel,
+        updatedAt: Date.now()
+      });
     }
-
-    function openLoginModal() { document.getElementById('accountModal').classList.add('active'); }
-    function closeLoginModal() { document.getElementById('accountModal').classList.remove('active'); }
 
     // --- 4. Game Logic & Level Progression ---
     let currentLevel = parseInt(localStorage.getItem('iq_level')) || 1;
@@ -982,6 +959,7 @@
         localStorage.setItem('iq_level', 1);
         localStorage.setItem('iq_max_level', 1);
         localStorage.setItem('iq_score', 0);
+        syncScore();
         initLevel(1);
       }
     }
@@ -1008,23 +986,10 @@
 
     function closeLevelModal() { document.getElementById('levelModal').classList.remove('active'); }
 
-    function syncScore() {
-      if (!db) return;
-      let pName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
-      let uid = currentUser ? currentUser.uid : (localStorage.getItem('iq_uid') || 'anon_' + Date.now());
-      localStorage.setItem('iq_uid', uid);
-      db.ref('leaderboard/' + uid).set({
-        name: pName,
-        score: totalScore,
-        level: currentLevel,
-        updatedAt: Date.now()
-      });
-    }
-
     function openLeaderboard() {
       document.getElementById('leaderboardModal').classList.add('active');
       const box = document.getElementById('leaderboardBox');
-      box.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;">Loading scores...</div>';
+      box.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;">Loading Global Rankings...</div>';
 
       if (db && navigator.onLine) {
         db.ref('leaderboard').orderByChild('score').limitToLast(100).once('value', snap => {
@@ -1039,9 +1004,8 @@
     }
 
     function renderOfflineScores() {
-      let myName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
       renderLeaderboard([
-        { name: myName, score: totalScore, level: currentLevel },
+        { name: playerName, score: totalScore, level: currentLevel },
         { name: "ShinchanFan", score: 3400, level: 12 },
         { name: "PikachuPro", score: 2100, level: 8 }
       ]);
@@ -1049,9 +1013,8 @@
 
     function renderLeaderboard(list) {
       const box = document.getElementById('leaderboardBox');
-      let myName = currentUser ? currentUser.displayName : (localStorage.getItem('iq_user_nickname') || 'Bittu');
       box.innerHTML = list.map((p, idx) => `
-        <div class="leaderboard-row" style="${p.name === myName ? 'border-color:#38bdf8;' : ''}">
+        <div class="leaderboard-row" style="${p.name === playerName ? 'border-color:#38bdf8;background:rgba(56,189,248,0.1)' : ''}">
           <span>#${idx+1} <b>${p.name}</b> <small style="color:#64748b;">(Lvl ${p.level||1})</small></span>
           <span style="color:#ffb703;font-weight:bold;">${p.score} pts</span>
         </div>
@@ -1061,9 +1024,7 @@
     function closeLeaderboard() { document.getElementById('leaderboardModal').classList.remove('active'); }
 
     window.addEventListener('load', () => {
-      let saved = localStorage.getItem('iq_user_nickname');
-      if (saved) updateUserUI(saved, null);
-
+      syncScore();
       setTimeout(() => {
         const s = document.getElementById('splashScreen');
         if (s) s.classList.add('hide');
