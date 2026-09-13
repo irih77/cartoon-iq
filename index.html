@@ -6,9 +6,9 @@
 	<title>CARTOON IQ - Global Leaderboard Edition</title>
 
 	<!-- Firebase SDKs -->
-	<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
 <style>
     :root {
@@ -691,7 +691,7 @@
 		<div style="font-size:32px;">✏️</div>
 		<div style="font-size:17px;font-weight:800;color:#fff;margin:6px 0;">YOUR PLAYER NAME</div>
 		<div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">This name will appear on the Global Top 100 Leaderboard</div>
-
+		
 		<div style="display:flex;gap:6px;margin-bottom:10px;">
 		  <input type="text" id="changeNameInput" placeholder="Enter your name" style="flex:1;padding:10px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:13px;outline:none;text-align:center;font-weight:bold;">
 		  <button class="btn" style="flex:0 0 70px;background:#38bdf8;color:#000;font-weight:800;" onclick="savePlayerName()">SAVE</button>
@@ -829,36 +829,15 @@
     let playerName = localStorage.getItem('iq_player_name') || 'Bittu';
     let playerId = localStorage.getItem('iq_player_id');
 
-    // Firebase initialization — uses the Compat SDK so this single HTML file
-    // works without a bundler and supports Google + Email/Password Auth.
-    function initFirebase() {
-      try {
-        if (!window.firebase) {
-          showAuthError('Firebase SDK did not load. Check your internet connection and make sure this HTML is hosted on a web server.');
-          return false;
-        }
-
-        if (typeof firebase.auth !== 'function') {
-          showAuthError('Firebase Auth SDK did not load. Keep firebase-auth-compat.js in the HTML and reload.');
-          return false;
-        }
-
-        if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-        }
-
+    try {
+      if (window.firebase) {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         db = firebase.database();
         auth = firebase.auth();
-        return !!auth;
-      } catch (e) {
-        console.error('Firebase initialization failed:', e);
-        showAuthError('Firebase initialization failed: ' + (e.message || 'Unknown error'));
-        return false;
       }
+    } catch (e) {
+      console.warn("Firebase initialization failed", e);
     }
-
-    // Run after the Firebase CDN scripts above have loaded.
-    initFirebase();
 
     function showAuthError(message) {
       const el = document.getElementById('authError');
@@ -879,12 +858,23 @@
       try {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        await auth.signInWithPopup(provider);
+        try {
+          await auth.signInWithPopup(provider);
+        } catch (popupError) {
+          // Mobile browsers can block popups; use redirect as a fallback.
+          if (popupError && (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/popup-closed-by-user')) {
+            await auth.signInWithRedirect(provider);
+            return;
+          }
+          throw popupError;
+        }
       } catch (e) {
         console.error(e);
-        showAuthError(e.code === 'auth/popup-blocked'
-          ? 'Popup was blocked. Please allow popups and try again.'
-          : (e.message || 'Google sign-in failed.'));
+        showAuthError(e.code === 'auth/api-key-not-valid'
+          ? 'Firebase API key is invalid or restricted. Use the exact Web App config from Firebase Project Settings and check API-key restrictions.'
+          : (e.code === 'auth/unauthorized-domain'
+            ? 'This website is not an authorized Firebase domain. Add your GitHub Pages domain in Firebase Authentication → Settings → Authorized domains.'
+            : (e.message || 'Google sign-in failed.')));
       } finally {
         setAuthBusy(false);
       }
@@ -992,10 +982,6 @@
         if (user) handleSignedInUser(user);
         else handleSignedOutUser();
       });
-    } else {
-      // Keep the auth screen visible and show a useful error instead of
-      // the generic "not initialized" message.
-      document.getElementById('authScreen').classList.remove('hidden');
     }
     function openNameModal() {
       document.getElementById('changeNameInput').value = playerName;
